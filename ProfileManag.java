@@ -1,47 +1,45 @@
-import java.util.ArrayList;
 import java.util.List;
 
 public class ProfileManag {
-    private static List<Profile> users = new ArrayList<>();
+
+    public static void addUser(Profile user) {
+        Profile.getUsers().add(user);
+    }
 
     public static void removeUser(String username) {
+        List<Profile> users = Profile.getUsers();
+        Profile toRemove = null;
         for (Profile user : users) {
             if (user.getUsername().equals(username)) {
-                users.remove(user);
-                System.out.println("Користувача видалено: " + username);
-                return;
+                toRemove = user;
+                break;
             }
         }
-        System.out.println("Користувача не знайдено!");
-    }
-
-    public static void showUsers() {
-        if (users.isEmpty()) {
-            System.out.println("Немає зареєстрованих користувачів.");
+        if (toRemove != null) {
+            users.remove(toRemove);
+            System.out.println("Користувача видалено: " + username);
         } else {
-            System.out.println("Список користувачів:");
-            for (Profile user : users) {
-                System.out.println("- " + user.getUsername());
-            }
+            System.out.println("Користувача не знайдено");
         }
-    }
-
-    public static Profile findUser(String username) {
-        for (Profile user : users) {
-            if (user.getUsername().equals(username)) {
-                return user;
-            }
-        }
-        System.out.println("Користувача не знайдено!");
-        return null;
     }
 
     public static void clearAllUsers() {
-        users.clear();
-        System.out.println("Усі користувачі видалені!");
+        Profile.getUsers().clear();
+        System.out.println("Усі користувачі видалені");
     }
 
     public static int getUserCount() {
-        return users.size();
+        return Profile.getUsers().size();
+    }
+
+    public static void authenticateUser(String username, String password) {
+        List<Profile> users = Profile.getUsers();
+        for (Profile user : users) {
+            if (user.getUsername().equals(username) && user.authenticate(password)) {
+                System.out.println("Успішна аутентифікація для користувача: " + username);
+                return;
+            }
+        }
+        System.out.println("Помилка: неправильне ім'я користувача або пароль.");
     }
 }
