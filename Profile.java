@@ -10,13 +10,16 @@ public class Profile {
 
     public Profile(String username, String password) {
         if (users.size() >= MAX_USERS) {
-            throw new IllegalArgumentException("Досягнуто максимальну кількість користувачів! Неможливо додати нового користувача.");
+            System.out.println("Досягнуто максимальну кількість користувачів! Неможливо додати нового користувача.");
+            return;
         }
         if (!isValidUsername(username)) {
-            throw new IllegalArgumentException("Некоректне ім'я користувача: має бути не менше 5 символів і не містити пробілів");
+            System.out.println("Некоректне ім'я користувача: має бути не менше 5 символів і не містити пробілів");
+            return;
         }
         if (!isValidPassword(password)) {
-            throw new IllegalArgumentException("Некоректний пароль: має відповідати вимогам безпеки");
+            System.out.println("Некоректний пароль: має відповідати вимогам безпеки");
+            return;
         }
         this.username = username;
         this.password = password;
@@ -32,8 +35,15 @@ public class Profile {
     }
 
     public static void addBlockedPassword(String password) {
+        if (password == null || password.trim().isEmpty()) {
+            System.out.println("Помилка: заборонене слово не може бути порожнім.");
+            return;
+        }
         if (!blockedPasswords.contains(password.toLowerCase())) {
             blockedPasswords.add(password.toLowerCase());
+            System.out.println("Слово додано до списку заборонених паролів.");
+        } else {
+            System.out.println("Цей пароль вже заборонений.");
         }
     }
 
@@ -42,6 +52,10 @@ public class Profile {
     }
 
     private boolean isValidPassword(String password) {
+        if (!password.matches("[a-zA-Z0-9!@#$%^&*()-_+=]+")) {
+            System.out.println("Помилка: пароль має містити лише латинські символи, цифри та спеціальні символи.");
+            return false;
+        }
         if (password == null || password.length() < 10 || password.contains(" ") || blockedPasswords.contains(password.toLowerCase())) {
             return false;
         }
