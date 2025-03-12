@@ -10,7 +10,7 @@ public class Profile {
 
     public Profile(String username, String password) {
         if (users.size() >= MAX_USERS) {
-            System.out.println("Досягнуто максимальну кількість користувачів! Неможливо додати нового користувача.");
+            System.out.println("Досягнуто максимальну кількість користувачів, Неможливо додати нового користувача");
             return;
         }
         if (!isValidUsername(username)) {
@@ -36,14 +36,34 @@ public class Profile {
 
     public static void addBlockedPassword(String password) {
         if (password == null || password.trim().isEmpty()) {
-            System.out.println("Помилка: заборонене слово не може бути порожнім.");
+            System.out.println("Помилка: заборонене слово не може бути порожнім");
             return;
         }
         if (!blockedPasswords.contains(password.toLowerCase())) {
             blockedPasswords.add(password.toLowerCase());
-            System.out.println("Слово додано до списку заборонених паролів.");
+            System.out.println("Слово додано до списку заборонених паролів");
         } else {
-            System.out.println("Цей пароль вже заборонений.");
+            System.out.println("Цей пароль вже заборонений");
+        }
+    }
+
+    public static List<Profile> getUsers() {
+        return users;
+    }
+
+    public static List<String> getBlockedPasswords() {
+        return blockedPasswords;
+    }
+
+    public static void showUsers() {
+        List<Profile> users = Profile.getUsers();
+        if (users.isEmpty()) {
+            System.out.println("Немає зареєстрованих користувачів");
+        } else {
+            System.out.println("Список користувачів:");
+            for (Profile user : users) {
+                System.out.println("- " + user.getUsername());
+            }
         }
     }
 
@@ -52,10 +72,6 @@ public class Profile {
     }
 
     private boolean isValidPassword(String password) {
-        if (!password.matches("[a-zA-Z0-9!@#$%^&*()-_+=]+")) {
-            System.out.println("Помилка: пароль має містити лише латинські символи, цифри та спеціальні символи.");
-            return false;
-        }
         if (password == null || password.length() < 10 || password.contains(" ") || blockedPasswords.contains(password.toLowerCase())) {
             return false;
         }
